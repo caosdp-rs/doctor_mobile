@@ -400,7 +400,7 @@ packages:
     source: hosted
     version: "1.1.1"
   table_calendar:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: table_calendar
       url: "https://pub.dartlang.org"

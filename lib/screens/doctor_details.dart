@@ -1,3 +1,4 @@
+import 'package:doctor_flutter_laravel/components/button.dart';
 import 'package:doctor_flutter_laravel/utils/config.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -37,6 +38,18 @@ class _DoctorDetailsState extends State<DoctorDetails> {
         children: <Widget>[
           AboutDoctor(),
           DetailBody(),
+          const Spacer(),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Button(
+              width: double.infinity,
+              title: 'Book Appointment',
+              onPressed: () {
+                Navigator.of(context).pushNamed('booking_page');
+              },
+              disable: false,
+            ),
+          )
         ],
       )),
     );
@@ -102,13 +115,25 @@ class DetailBody extends StatelessWidget {
   Widget build(BuildContext context) {
     Config().init(context);
     return Container(
-        padding: const EdgeInsets.all(20),
-        margin: const EdgeInsets.only(bottom: 30),
+        padding: const EdgeInsets.all(5),
+        margin: const EdgeInsets.only(bottom: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const <Widget>[
+          children: <Widget>[
             Config.spaceSmall,
-            DoctorInfo(),
+            const DoctorInfo(),
+            Config.spaceMedium,
+            const Text(
+              'About Doctor',
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+            ),
+            Config.spaceSmall,
+            const Text(
+              'Dr. Richard Tan is an experiience DentistHe is graduated sice 2008, and complete at Sungai Buloj school.',
+              style: TextStyle(fontWeight: FontWeight.w500, height: 1.5),
+              softWrap: true,
+              textAlign: TextAlign.justify,
+            )
             //doctor exp, patient and rating
           ],
         ));
