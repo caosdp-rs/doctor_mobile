@@ -1,4 +1,5 @@
 import 'package:doctor_flutter_laravel/components/button.dart';
+import 'package:doctor_flutter_laravel/providers/dio_provider.dart';
 import 'package:doctor_flutter_laravel/utils/config.dart';
 import 'package:flutter/material.dart';
 
@@ -67,8 +68,15 @@ class _LoginFormState extends State<LoginForm> {
         Button(
             width: double.infinity,
             title: 'Entrar',
-            onPressed: () {
-              Navigator.of(context).pushNamed('main');
+            onPressed: () async {
+              //login here
+              print('ckk');
+              final token = await DioProvider()
+                  .getToken(_emailController.text, _passController.text);
+              final user = await DioProvider().getUser(token);
+              //Navigator.of(context).pushNamed('main');
+              //print(token);
+              print(user);
             },
             disable: false)
       ]),

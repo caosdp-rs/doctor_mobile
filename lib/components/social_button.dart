@@ -13,7 +13,7 @@ class SocialButton extends StatelessWidget {
     Config().init(context);
     return OutlinedButton(
         style: OutlinedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 15),
+            padding: const EdgeInsets.symmetric(vertical: 0),
             side: const BorderSide(width: 1, color: Colors.black)),
         onPressed: () {
           // _googleSignIn.signIn().then((value) {

@@ -28,7 +28,7 @@ class _AuthPageState extends State<AuthPage> {
           children: <Widget>[
             Text(
               AppText.enText['welcome_text']!,
-              style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             Config.spaceSmall,
             Text(
@@ -37,7 +37,7 @@ class _AuthPageState extends State<AuthPage> {
             ),
             Config.spaceSmall,
             LoginForm(), //login components here
-            Config.spaceSmall,
+
             Center(
               child: TextButton(
                 onPressed: () {},
@@ -45,7 +45,7 @@ class _AuthPageState extends State<AuthPage> {
                   AppText.enText['forgot-password']!,
                   style: const TextStyle(
                       color: Colors.black,
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold),
                 ),
               ),
@@ -69,7 +69,6 @@ class _AuthPageState extends State<AuthPage> {
                 SocialButton(social: 'facebook'),
               ],
             ),
-            Config.spaceSmall,
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
