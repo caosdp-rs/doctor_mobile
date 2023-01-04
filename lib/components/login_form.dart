@@ -1,7 +1,14 @@
+import 'dart:convert';
+
 import 'package:doctor_flutter_laravel/components/button.dart';
+import 'package:doctor_flutter_laravel/main.dart';
+import 'package:doctor_flutter_laravel/models/auth_model.dart';
 import 'package:doctor_flutter_laravel/providers/dio_provider.dart';
-import 'package:doctor_flutter_laravel/utils/config.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:doctor_flutter_laravel/utils/config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -12,8 +19,8 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passController = TextEditingController();
+  final _emailController = TextEditingController(text: "caosdp@gmail.com");
+  final _passController = TextEditingController(text: "12345678");
   //final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   bool obsecurePass = true;
@@ -65,20 +72,24 @@ class _LoginFormState extends State<LoginForm> {
           ),
         ),
         Config.spaceSmall,
-        Button(
-            width: double.infinity,
-            title: 'Entrar',
-            onPressed: () async {
-              //login here
-              print('ckk');
-              final token = await DioProvider()
-                  .getToken(_emailController.text, _passController.text);
-              final user = await DioProvider().getUser(token);
-              //Navigator.of(context).pushNamed('main');
-              //print(token);
-              print(user);
-            },
-            disable: false)
+        Consumer<AuthModel>(
+          builder: (context, auth, child) {
+            return Button(
+                width: double.infinity,
+                title: 'Entrar',
+                onPressed: () async {
+                  //login here
+                  print('ckk');
+                  final token = await DioProvider()
+                      .getToken(_emailController.text, _passController.text);
+                  if (token) {
+                    auth.loginSuccess();
+                    MyApp.navigatorKey.currentState!.pushNamed('main');
+                  }
+                },
+                disable: false);
+          },
+        ),
       ]),
     );
     //suffixIcon: IconButton(onPressed: (){}), icon: obsecurePass ? const Icon(Icons.visibility_off_outlined,color: Colors.black38,):const Icon(Icons.visibility_off_outlined,color: Colors.black38,))),

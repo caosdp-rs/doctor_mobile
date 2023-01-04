@@ -38,6 +38,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "consumer",
+      "rootUri": "file:///c:/flutter/.pub-cache/hosted/pub.dartlang.org/consumer-2.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "convert",
       "rootUri": "file:///c:/flutter/.pub-cache/hosted/pub.dartlang.org/convert-3.1.1",
       "packageUri": "lib/",
@@ -398,7 +404,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2022-12-28T16:28:10.968502Z",
+  "generated": "2023-01-04T10:08:41.397566Z",
   "generator": "pub",
   "generatorVersion": "2.18.6"
 }

@@ -6,7 +6,7 @@ class AuthModel extends ChangeNotifier {
     return _isLogin;
   }
 
-  void loginSucess() {
+  void loginSuccess() {
     _isLogin = true;
     notifyListeners();
   }
