@@ -9,7 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -48,15 +48,11 @@ class _HomePageState extends State<HomePage> {
     //get token from share preferences
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
-    print(token);
     if (token.isNotEmpty && token != '') {
-      //get user data
       final response = await DioProvider().getUser(token);
       if (response != null) {
         setState(() {
-          //json decode
           user = json.decode(response);
-          print(user);
         });
       }
     }
@@ -64,8 +60,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    getData();
     super.initState();
+    getData();
   }
 
   @override
@@ -73,7 +69,10 @@ class _HomePageState extends State<HomePage> {
     Config().init(context);
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 15,
+        ),
         child: SafeArea(
             child: SingleChildScrollView(
           child: Column(
@@ -82,13 +81,13 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: const <Widget>[
                   Text(
-                    user['name'],
+                    'Olá', //user['email'],
                     style: const TextStyle(
                         fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     child: CircleAvatar(
                       radius: 30,
                       backgroundImage: AssetImage('assets/profile1.jpg'),

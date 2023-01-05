@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:doctor_flutter_laravel/components/button.dart';
 import 'package:doctor_flutter_laravel/main.dart';
 import 'package:doctor_flutter_laravel/models/auth_model.dart';
@@ -10,16 +8,17 @@ import 'package:provider/provider.dart';
 import 'package:doctor_flutter_laravel/utils/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+class SignUpForm extends StatefulWidget {
+  const SignUpForm({Key? key}) : super(key: key);
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  _SignUpFormState createState() => _SignUpFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController(text: "caosdp@gmail.com");
+  final _nameController = TextEditingController(text: "Carlos Silva");
+  final _emailController = TextEditingController(text: "caosdp@yahoo.com");
   final _passController = TextEditingController(text: "12345678");
   //final GoogleSignIn _googleSignIn = GoogleSignIn();
 
@@ -30,6 +29,18 @@ class _LoginFormState extends State<LoginForm> {
       key: _formKey,
       child:
           Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
+        TextFormField(
+          controller: _nameController,
+          keyboardType: TextInputType.text,
+          cursorColor: Config.primaryColor,
+          decoration: const InputDecoration(
+              hintText: 'Nome completo',
+              labelText: 'Nome',
+              alignLabelWithHint: true,
+              prefixIcon: Icon(Icons.person_outlined),
+              prefixIconColor: Config.primaryColor),
+        ),
+        Config.spaceSmall,
         TextFormField(
           controller: _emailController,
           keyboardType: TextInputType.emailAddress,
@@ -76,17 +87,21 @@ class _LoginFormState extends State<LoginForm> {
           builder: (context, auth, child) {
             return Button(
                 width: double.infinity,
-                title: 'Entrar',
+                title: 'Registrar',
                 onPressed: () async {
-                  //login here
-                  //print('ckk');
-                  final token = await DioProvider()
-                      .getToken(_emailController.text, _passController.text);
-
-                  if (token) {
-                    auth.loginSuccess();
-                    //print('pagina home');
-                    MyApp.navigatorKey.currentState!.pushNamed('main');
+                  final userRegistration = await DioProvider().registerUser(
+                      _nameController.text,
+                      _emailController.text,
+                      _passController.text);
+                  if (userRegistration) {
+                    final token = await DioProvider()
+                        .getToken(_emailController.text, _passController.text);
+                    if (token) {
+                      auth.loginSuccess();
+                      MyApp.navigatorKey.currentState!.pushNamed('main');
+                    }
+                  } else {
+                    print('register failed');
                   }
                 },
                 disable: false);
@@ -94,6 +109,5 @@ class _LoginFormState extends State<LoginForm> {
         ),
       ]),
     );
-    //suffixIcon: IconButton(onPressed: (){}), icon: obsecurePass ? const Icon(Icons.visibility_off_outlined,color: Colors.black38,):const Icon(Icons.visibility_off_outlined,color: Colors.black38,))),
   }
 }
