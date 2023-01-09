@@ -53,6 +53,7 @@ class _HomePageState extends State<HomePage> {
       if (response != null) {
         setState(() {
           user = json.decode(response);
+          print(user);
         });
       }
     }
@@ -81,13 +82,13 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const <Widget>[
+                children: <Widget>[
                   Text(
-                    'Olá', //user['email'],
+                    user['name'],
                     style: const TextStyle(
                         fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     child: CircleAvatar(
                       radius: 30,
                       backgroundImage: AssetImage('assets/profile1.jpg'),
