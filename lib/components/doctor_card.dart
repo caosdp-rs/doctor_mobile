@@ -2,10 +2,11 @@ import 'package:doctor_flutter_laravel/utils/config.dart';
 import 'package:flutter/material.dart';
 
 class DoctorCard extends StatelessWidget {
-  const DoctorCard({Key? key, required this.route}) : super(key: key);
+  const DoctorCard({Key? key, required this.route, required this.doctor})
+      : super(key: key);
 
   final String route;
-
+  final Map<String, dynamic> doctor; //receive doctor details
   @override
   Widget build(BuildContext context) {
     Config().init(context);
@@ -19,8 +20,12 @@ class DoctorCard extends StatelessWidget {
           child: Row(children: [
             SizedBox(
               width: Config.widthSize * 0.33,
-              child: Image.asset(
-                'assets/doctor_2.jpg',
+              // child: Image.asset(
+              //   'assets/doctor_2.jpg',
+              //   fit: BoxFit.fill,
+              // ),
+              child: Image.network(
+                "http://192.168.0.112:8000${doctor['doctor_profile']}",
                 fit: BoxFit.fill,
               ),
             ),
@@ -30,14 +35,15 @@ class DoctorCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Text(
-                    'Dr Richard Tan',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  Text(
+                    "Dr ${doctor['doctor_name']}",
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  const Text(
-                    'Dental',
-                    style:
-                        TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+                  Text(
+                    "${doctor['category']}",
+                    style: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.normal),
                   ),
                   Spacer(),
                   Row(

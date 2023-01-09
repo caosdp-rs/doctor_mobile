@@ -161,10 +161,10 @@ class _HomePageState extends State<HomePage> {
                     //List  of top doctors
                     Config.spaceSmall,
                     Column(
-                      children: List.generate(10, (index) {
+                      children: List.generate(user['doctor'].length, (index) {
                         return DoctorCard(
-                          route: 'doc_details',
-                        );
+                            route: 'doc_details',
+                            doctor: user['doctor'][index]);
                       }),
                     )
                   ],

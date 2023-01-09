@@ -20,7 +20,7 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController(text: "caosdp@gmail.com");
-  final _passController = TextEditingController(text: "12345678");
+  final _passController = TextEditingController(text: "password");
   //final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   bool obsecurePass = true;
