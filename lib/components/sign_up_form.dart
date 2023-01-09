@@ -18,8 +18,8 @@ class SignUpForm extends StatefulWidget {
 class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController(text: "Carlos Silva");
-  final _emailController = TextEditingController(text: "caosdp@yahoo.com");
-  final _passController = TextEditingController(text: "12345678");
+  final _emailController = TextEditingController(text: "caosdp@gmail.com");
+  final _passController = TextEditingController(text: "password");
   //final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   bool obsecurePass = true;
