@@ -16,6 +16,8 @@ class _DoctorDetailsState extends State<DoctorDetails> {
   bool isFav = false;
   @override
   Widget build(BuildContext context) {
+    //get arguments passed from doctor card
+    final doctor = ModalRoute.of(context)!.settings.arguments as Map;
     return Scaffold(
       appBar: CustomAppBar(
         appTitle: 'Doctor Details',
@@ -36,8 +38,11 @@ class _DoctorDetailsState extends State<DoctorDetails> {
       body: SafeArea(
           child: Column(
         children: <Widget>[
-          AboutDoctor(),
-          DetailBody(),
+          //pass doctor details here
+          AboutDoctor(
+            doctor: doctor,
+          ),
+          DetailBody(doctor: doctor),
           const Spacer(),
           Padding(
             padding: const EdgeInsets.all(20),
@@ -57,8 +62,8 @@ class _DoctorDetailsState extends State<DoctorDetails> {
 }
 
 class AboutDoctor extends StatelessWidget {
-  const AboutDoctor({super.key});
-
+  const AboutDoctor({Key? key, required this.doctor}) : super(key: key);
+  final Map<dynamic, dynamic> doctor;
   @override
   Widget build(BuildContext context) {
     Config().init(context);
@@ -66,15 +71,16 @@ class AboutDoctor extends StatelessWidget {
       width: double.infinity,
       child: Column(
         children: <Widget>[
-          const CircleAvatar(
+          CircleAvatar(
             radius: 65.0,
-            backgroundImage: AssetImage('assets/doctor_2.jpg'),
+            backgroundImage: NetworkImage(
+                "http://192.168.0.112:8000${doctor['doctor_profile']}"),
             backgroundColor: Colors.white,
           ),
           Config.spaceMedium,
-          const Text(
-            'Dr. Richard Tan',
-            style: TextStyle(
+          Text(
+            'Dr. ${doctor['doctor_name']}',
+            style: const TextStyle(
                 color: Colors.black,
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold),
@@ -109,28 +115,32 @@ class AboutDoctor extends StatelessWidget {
 }
 
 class DetailBody extends StatelessWidget {
-  const DetailBody({super.key});
+  const DetailBody({Key? key, required this.doctor}) : super(key: key);
+  final Map<dynamic, dynamic> doctor;
 
   @override
   Widget build(BuildContext context) {
     Config().init(context);
     return Container(
         padding: const EdgeInsets.all(5),
-        margin: const EdgeInsets.only(bottom: 10),
+        //margin: const EdgeInsets.only(bottom: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Config.spaceSmall,
-            const DoctorInfo(),
+            DoctorInfo(
+              patients: doctor['patients'],
+              exp: doctor['experience'],
+            ),
             Config.spaceMedium,
             const Text(
               'About Doctor',
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
             ),
             Config.spaceSmall,
-            const Text(
-              'Dr. Richard Tan is an experiience DentistHe is graduated sice 2008, and complete at Sungai Buloj school.',
-              style: TextStyle(fontWeight: FontWeight.w500, height: 1.5),
+            Text(
+              'Dr. ${doctor['doctor_name']} tem experiência ${doctor['category']}',
+              style: const TextStyle(fontWeight: FontWeight.w500, height: 1.5),
               softWrap: true,
               textAlign: TextAlign.justify,
             )
@@ -141,27 +151,29 @@ class DetailBody extends StatelessWidget {
 }
 
 class DoctorInfo extends StatelessWidget {
-  const DoctorInfo({super.key});
-
+  const DoctorInfo({Key? key, required this.patients, required this.exp})
+      : super(key: key);
+  final int patients;
+  final int exp;
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: const <Widget>[
+      children: <Widget>[
         InfoCard(
-          label: 'Patients',
-          value: '109',
+          label: 'Pacientes',
+          value: '$patients',
         ),
-        SizedBox(
+        const SizedBox(
           width: 15,
         ),
         InfoCard(
-          label: 'Experiences',
-          value: '10 years',
+          label: 'Experiência',
+          value: '$exp',
         ),
-        SizedBox(
+        const SizedBox(
           width: 15,
         ),
-        InfoCard(
+        const InfoCard(
           label: 'Rating',
           value: '4.6',
         ),
@@ -184,7 +196,10 @@ class InfoCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         color: Config.primaryColor,
       ),
-      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+      padding: const EdgeInsets.symmetric(
+        vertical: 15,
+        horizontal: 15,
+      ),
       child: Column(children: <Widget>[
         Text(
           label,
