@@ -17,6 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic> user = {};
+  Map<String, dynamic> doctor = {};
   List<Map<String, dynamic>> medCat = [
     {
       "icon": FontAwesomeIcons.heartPulse,
@@ -53,7 +54,15 @@ class _HomePageState extends State<HomePage> {
       if (response != null) {
         setState(() {
           user = json.decode(response);
-          print(user);
+          //print(user);
+          //check if any appointment today
+          for (var doctorData in user['doctor']) {
+            //if there is appointment return of today
+            //then pass the doctor info
+            if (doctorData['appointments'] != null) {
+              doctor = doctorData;
+            }
+          }
         });
       }
     }
@@ -117,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                             margin: const EdgeInsets.only(right: 20),
                             color: Config.primaryColor,
                             child: Padding(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   horizontal: 15, vertical: 10),
                               child: Row(
                                 mainAxisAlignment:
@@ -151,10 +160,32 @@ class _HomePageState extends State<HomePage> {
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     Config.spaceSmall,
-                    AppointmentCard(),
+                    doctor.isNotEmpty
+                        ? AppointmentCard(
+                            doctor: doctor,
+                            color: Config.primaryColor,
+                          )
+                        : Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade300,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(20),
+                                child: Text(
+                                  'Nenhum agendamento para hoje',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                            ),
+                          ),
                     Config.spaceSmall,
                     const Text(
-                      'Top Doctors',
+                      'Top Doutores',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
