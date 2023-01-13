@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:doctor_flutter_laravel/components/appointment_card.dart';
+import 'package:doctor_flutter_laravel/providers/dio_provider.dart';
 import 'package:doctor_flutter_laravel/utils/config.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppointmentPage extends StatefulWidget {
   const AppointmentPage({super.key});
@@ -15,32 +19,52 @@ enum FilterStatus { upcoming, complete, cancel }
 class _AppointmentPageState extends State<AppointmentPage> {
   FilterStatus status = FilterStatus.upcoming;
   Alignment _alignment = Alignment.centerLeft;
-  List<dynamic> schedules = [
-    {
-      "doctor_name": "Richard Tan",
-      "doctor_profile": "assets/doctor_2.jpg",
-      "category": "Dental",
-      "status": FilterStatus.upcoming
-    },
-    {
-      "doctor_name": "Max Lin",
-      "doctor_profile": "assets/doctor_3.jpg",
-      "category": "Cardiology",
-      "status": FilterStatus.complete
-    },
-    {
-      "doctor_name": "Jane Wong",
-      "doctor_profile": "assets/doctor_4.jpg",
-      "category": "Respiration",
-      "status": FilterStatus.complete
-    },
-    {
-      "doctor_name": "Jenny Jan",
-      "doctor_profile": "assets/doctor_5.jpg",
-      "category": "General",
-      "status": FilterStatus.cancel,
-    },
-  ];
+  // List<dynamic> schedules = [
+  //   {
+  //     "doctor_name": "Richard Tan",
+  //     "doctor_profile": "assets/doctor_2.jpg",
+  //     "category": "Dental",
+  //     "status": FilterStatus.upcoming
+  //   },
+  //   {
+  //     "doctor_name": "Max Lin",
+  //     "doctor_profile": "assets/doctor_3.jpg",
+  //     "category": "Cardiology",
+  //     "status": FilterStatus.complete
+  //   },
+  //   {
+  //     "doctor_name": "Jane Wong",
+  //     "doctor_profile": "assets/doctor_4.jpg",
+  //     "category": "Respiration",
+  //     "status": FilterStatus.complete
+  //   },
+  //   {
+  //     "doctor_name": "Jenny Jan",
+  //     "doctor_profile": "assets/doctor_5.jpg",
+  //     "category": "General",
+  //     "status": FilterStatus.cancel,
+  //   },
+  // ];
+  List<dynamic> schedules = [];
+
+  //get appointments details
+  Future<void> getAppointments() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+    final appointment = await DioProvider().getAppointments(token);
+    if (appointment != 'Error') {
+      setState(() {
+        schedules = json.decode(appointment);
+        print(schedules);
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    getAppointments();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +200,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                     ),
                                     Text(
                                       _schedule['category'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.grey,
                                           fontSize: 12,
                                           fontWeight: FontWeight.w700),
