@@ -1,5 +1,9 @@
+import 'package:doctor_flutter_laravel/main.dart';
+import 'package:doctor_flutter_laravel/providers/dio_provider.dart';
 import 'package:doctor_flutter_laravel/utils/config.dart';
 import 'package:flutter/material.dart';
+import 'package:rating_dialog/rating_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppointmentCard extends StatefulWidget {
   const AppointmentCard({Key? key, required this.doctor, required this.color})
@@ -80,11 +84,54 @@ class _AppointmentCardState extends State<AppointmentCard> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return RatingDialog(
+                                  initialRating: 1.0,
+                                  title: const Text(
+                                    'Avalie o doutor',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  message: const Text(
+                                    'Por favor avalie o doutor',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  image: const FlutterLogo(
+                                    size: 100,
+                                  ),
+                                  submitButtonText: 'Enviar',
+                                  commentHint: 'Sua avaliação',
+                                  onSubmitted: (response) async {
+                                    final SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+                                    final token =
+                                        prefs.getString('token') ?? '';
+                                    final rating = await DioProvider()
+                                        .storeReviews(
+                                            response.comment,
+                                            response.rating,
+                                            widget.doctor['appointments']['id'],
+                                            widget.doctor['doc_id'],
+                                            token);
+                                    if (rating == 200 && rating != '') {
+                                      MyApp.navigatorKey.currentState!
+                                          .pushNamed('main');
+                                    }
+                                  });
+                            });
+                      },
                       child: const Text(
                         'Completed',
                         style: TextStyle(color: Colors.white),
                       ),
-                      onPressed: () {},
                     ),
                   ),
                 ],
